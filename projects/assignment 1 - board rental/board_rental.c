@@ -19,7 +19,7 @@
 #define MIN_CHARGE_HOURS 3 // the amount of hours where only the minimum will be charged
 
 // function prototypes
-double get_valid_input();
+double get_valid_input(void);
 double calculate_charge(double hours);
 void print_summary(unsigned int boardNum, double totalHours, double totalCharge);
 
@@ -84,18 +84,18 @@ int main(void)
  *
  *  returns: the valid input
  */
-double get_valid_input()
+double get_valid_input(void)
 {
 	// declare variables
 	double input;
-	unsigned int scannedVar;
+	unsigned int scanned_var;
 
 	// validate input and clear buffer
-	scannedVar = scanf("%lf", &input);
+	scanned_var = scanf("%lf", &input);
 	while ((getchar()) != '\n')
 		;
 
-	if (scannedVar == 1)
+	if (scanned_var == 1)
 	{
 		return input;
 	}

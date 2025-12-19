@@ -20,7 +20,7 @@
 const double GRADE_CATEGORY_WEIGHT[] = {0.1, 0.3, 0.3, 0.15, .15};					  // weights for each category
 
 // function prototypes
-int get_valid_input();
+int get_valid_input(void);
 void enter_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category);
 void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t category);
 void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category);
@@ -35,7 +35,7 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 int main(void)
 {
 	// declare 2D array
-	int gradeBook[STUDENTS][GRADE_CATEGORIES];
+	int grade_book[STUDENTS][GRADE_CATEGORIES];
 
 	// print header
 	printf("This program will calculate the grades for these categories:\n%s\nThe category weights are:\n", CATEGORIES);
@@ -47,9 +47,11 @@ int main(void)
 	printf("%s\n\n", CATEGORIES);
 
 	// enter grades into the grade book
-	enter_grades(gradeBook, STUDENTS, GRADE_CATEGORIES);
-	print_grades(gradeBook, STUDENTS, GRADE_CATEGORIES);
-	calculate_grades(gradeBook, STUDENTS, GRADE_CATEGORIES);
+	enter_grades(grade_book, STUDENTS, GRADE_CATEGORIES);
+	print_grades(grade_book, STUDENTS, GRADE_CATEGORIES);
+	calculate_grades(grade_book, STUDENTS, GRADE_CATEGORIES);
+
+	return 0;
 
 } // main
 
@@ -60,25 +62,25 @@ int main(void)
  *
  *  returns: the valid input
  */
-int get_valid_input()
+int get_valid_input(void)
 {
 	// declare variables
 	int input;
-	unsigned int scannedVar;
-	bool isValid = false;
+	unsigned int scanned_var;
+	bool is_valid = false;
 
 	// determine if valid
 	do
 	{
-		scannedVar = scanf("%d", &input);
+		scanned_var = scanf("%d", &input);
 		while ((getchar()) != '\n')
 			;
 
-		if (scannedVar == 1)
+		if (scanned_var == 1)
 		{
 			if (input >= MIN_GRADE && input <= MAX_GRADE)
 			{
-				isValid = true;
+				is_valid = true;
 			}
 			else
 			{
@@ -89,7 +91,7 @@ int get_valid_input()
 		{
 			puts("Not a vaild input.");
 		}
-	} while (!isValid);
+	} while (!is_valid);
 
 	// return once valid
 	return input;
@@ -161,10 +163,10 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
 void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category)
 {
 	// declare variables
-	double adjustedGrades[STUDENTS][GRADE_CATEGORIES];
-	double finalGrades[STUDENTS];
+	double adjusted_grades[STUDENTS][GRADE_CATEGORIES];
+	double final_grades[STUDENTS];
 	double sum = 0;
-	double totalSum = 0;
+	double total_sum = 0;
 	char grade;
 
 	// instead of going down a row, go down column and apply adjusted weight
@@ -172,7 +174,7 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 	{
 		for (size_t student = 0; student < STUDENTS; student++)
 		{
-			adjustedGrades[student][category] = grades[student][category] * GRADE_CATEGORY_WEIGHT[category];
+			adjusted_grades[student][category] = grades[student][category] * GRADE_CATEGORY_WEIGHT[category];
 		}
 	}
 
@@ -183,12 +185,12 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 
 		for (size_t category = 0; category < GRADE_CATEGORIES; category++)
 		{
-			sum += adjustedGrades[student][category];
+			sum += adjusted_grades[student][category];
 		}
 
 		// add adjusted grade to array
-		finalGrades[student] = sum;
-		totalSum += sum;
+		final_grades[student] = sum;
+		total_sum += sum;
 	}
 
 	printf("\n%s\n\n", "Final grades for students, respectively:");
@@ -196,19 +198,19 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 	// print individual student's grades
 	for (size_t student = 0; student < STUDENTS; student++)
 	{
-		if (finalGrades[student] >= 90)
+		if (final_grades[student] >= 90)
 		{
 			grade = 'A';
 		}
-		else if (finalGrades[student] >= 80)
+		else if (final_grades[student] >= 80)
 		{
 			grade = 'B';
 		}
-		else if (finalGrades[student] >= 70)
+		else if (final_grades[student] >= 70)
 		{
 			grade = 'C';
 		}
-		else if (finalGrades[student] >= 60)
+		else if (final_grades[student] >= 60)
 		{
 			grade = 'D';
 		}
@@ -217,11 +219,11 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 			grade = 'F';
 		}
 
-		printf("Student %d: %.1f %c\n", student + 1, finalGrades[student], grade);
+		printf("Student %d: %.1f %c\n", student + 1, final_grades[student], grade);
 	}
 
 	// display average
-	totalSum = totalSum / STUDENTS;
-	printf("\nClass average is %.1f\n", totalSum);
+	total_sum = total_sum / STUDENTS;
+	printf("\nClass average is %.1f\n", total_sum);
 
 } // calculate_grades
