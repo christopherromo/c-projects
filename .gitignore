@@ -3,6 +3,7 @@
 *.obj
 
 # Compiled binary executables
+/main
 *.exe
 *.out
 *.a
@@ -26,13 +27,9 @@ out/
 *.log
 *.tmp
 
-# VS Code settings
-.vscode/*
-!.vscode/tasks.json
-!.vscode/launch.json
-!.vscode/settings.json
-!.vscode/extensions.json
-
 # OS files
 .DS_Store
 Thumbs.db
+
+# Additional files to ignore
+/commands.txt
