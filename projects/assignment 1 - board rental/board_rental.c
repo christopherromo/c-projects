@@ -92,7 +92,8 @@ double get_valid_input()
 
 	// validate input and clear buffer
 	scannedVar = scanf("%lf", &input);
-	while ((getchar()) != '\n');
+	while ((getchar()) != '\n')
+		;
 
 	if (scannedVar == 1)
 	{
