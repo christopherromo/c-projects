@@ -15,106 +15,113 @@
 #include <limits.h>
 
 // constants
-#define BUFFER_SIZE 80															// buffer size for fgets
-#define DISTANCE_MIN 1															// minimum distance of race
-#define DISTANCE_MAX 200														// maximum distance of race
-#define RIDE_COST_MIN 50														// minimum ride cost
-#define RIDE_COST_MAX 250														// maximum ride cost
-#define JERSEY_COST_MIN 50														// minimum jersey cost
-#define JERSEY_COST_MAX 150														// maximum jersey cost
-#define CHARITY_PERCENT_MIN 5													// minimum charity percentage
-#define CHARITY_PERCENT_MAX 30													// maximum charity percentage
-#define AMOUNT_JERSEY_SIZES 4													// amount of jersey sizes
-#define AMOUNT_RESPONSES 2														// amount of responses
-const char *password = "B!k34u";												// admin password
-const char *responses[] = {"(y)es", "(n)o"};									// yes/no responses
-const char *jerseySizes[] = {"(s)mall", "(m)edium", "(l)arge", "(x)tra-large"}; // jersey sizes
+#define BUFFER_SIZE 80															 // buffer size for fgets
+#define DISTANCE_MIN 1															 // minimum distance of race
+#define DISTANCE_MAX 200														 // maximum distance of race
+#define RIDE_COST_MIN 50														 // minimum ride cost
+#define RIDE_COST_MAX 250														 // maximum ride cost
+#define JERSEY_COST_MIN 50														 // minimum jersey cost
+#define JERSEY_COST_MAX 150														 // maximum jersey cost
+#define CHARITY_PERCENT_MIN 5													 // minimum charity percentage
+#define CHARITY_PERCENT_MAX 30													 // maximum charity percentage
+#define AMOUNT_JERSEY_SIZES 4													 // amount of jersey sizes
+#define AMOUNT_RESPONSES 2														 // amount of responses
+const char *password = "B!k34u";												 // admin password
+const char *responses[] = {"(y)es", "(n)o"};									 // yes/no responses
+const char *jersey_sizes[] = {"(s)mall", "(m)edium", "(l)arge", "(x)tra-large"}; // jersey sizes
 
 // structs
 typedef struct organization
 {
-	char organizationName[BUFFER_SIZE];
-	double raceDistance;
-	double raceCost;
-	double jerseyCost;
-	double charityPercent;
-	double totalRiders;
-	double totalRaceSales;
-	double totalJerseys;
-	double totalJerseySales;
+	char organization_name[BUFFER_SIZE];
+	double race_distance;
+	double race_cost;
+	double jersey_cost;
+	double charity_percent;
+	double total_riders;
+	double total_race_sales;
+	double total_jerseys;
+	double total_jersey_sales;
 
 } Organization;
 
 typedef struct node
 {
-	Organization orgData;
-	struct node *nextPtr;
+	Organization org_data;
+	struct node *next_ptr;
 
 } Node;
 
 // function prototypes
 
-// tasks & validation
-void fgetsRemoveNewLine(char *inputString);
-char getValidChar(char *charArray[], size_t charSize);
-bool getValidDouble(const char *inputString, double *validDouble, unsigned int min, unsigned int max);
-bool validatePassword(void);
-void validatePayment(char *const customerName, double personalTotal, double charityPrice);
-void promptData(char *const promptString, double *const doublePtr, unsigned int min, unsigned int max);
+// task & validation functions
+void fgets_remove_newline(char *inputString);
+char get_valid_char(char *charArray[], size_t charSize);
+bool get_valid_double(const char *inputString, double *validDouble, unsigned int min, unsigned int max);
+bool validate_password(void);
+void validate_payment(char *const customerName, double personalTotal, double charityPrice);
+void prompt_data(char *const promptString, double *const doublePtr, unsigned int min, unsigned int max);
 
 // linked list functions
-void insertNode(Node **headPtr, Organization orgToInsert);
-void printOrganizations(Node *headPtr);
-unsigned int findOrganizationIndex(Node *headPtr);
+void insert_node(Node **headPtr, Organization orgToInsert);
+void print_organizations(Node *headPtr);
+unsigned int find_organization_index(Node *headPtr);
 
 // program functions
-void adminSetUp(Node *headPtr);
-void riderRegistration(Node *headPtr, unsigned int organizationIndex, char *const customerName);
-void printSummary(Node *headPtr);
+void admin_set_up(Node *headPtr);
+void rider_registration(Node *headPtr, unsigned int organizationIndex, char *const customerName);
+void print_summary(Node *headPtr);
 
+/*
+ * Function: main
+ * ----------------------------
+ *  Entry point of the program.
+ *
+ *  returns: exit status code
+ */
 int main(void)
 {
 	// declare linked list
-	Node *headPtr = NULL;
+	Node *head_ptr = NULL;
 
-	// main function variables
-	int compareResult;
-	unsigned int organizationIndex;
-	char customerName[BUFFER_SIZE];
-	bool isFinished = false; // used to end rider registration while loop
-	bool validExit = false;	 // checks if password is correct to end rider registration
+	// declare variables
+	int compare_result;
+	unsigned int organization_index;
+	char customer_name[BUFFER_SIZE];
+	bool is_finished = false; // used to end rider registration while loop
+	bool valid_exit = false;  // checks if password is correct to end rider registration
 
 	// validate the admin's password
 	puts("\n - Log-In - \n");
 	puts("Enter admin pin to set up race information:");
-	bool isValid = validatePassword();
+	bool is_valid = validate_password();
 
-	if (isValid)
+	if (is_valid)
 	{
-		// admin set-up
+		// admin set up
 		puts("\n - Admin Set-Up Mode - \n");
-		adminSetUp(&headPtr);
+		admin_set_up(&head_ptr);
 
 		// rider registration
 		puts("\n - Rider Registration Mode - \n");
-		while (!isFinished)
+		while (!is_finished)
 		{
 			// list organizations and find index
-			organizationIndex = findOrganizationIndex(headPtr);
+			organization_index = find_organization_index(head_ptr);
 
 			// prompt for name and if "quit" begin termination
 			puts("Enter your first name and last name to register for the ride; enter \"QUIT\" to end:");
-			fgetsRemoveNewLine(customerName);
-			compareResult = _strcmpi(customerName, "quit");
+			fgets_remove_newline(customer_name);
+			compare_result = _strcmpi(customer_name, "quit");
 
-			if (compareResult == 0) // user wants to exit rider registration
+			if (compare_result == 0) // user wants to exit rider registration
 			{
 				puts("Enter admin pin to exit rider registration:");
-				validExit = validatePassword();
+				valid_exit = validate_password();
 
-				if (validExit) // password correct; rider registration terminated
+				if (valid_exit) // password correct; rider registration terminated
 				{
-					isFinished = true;
+					is_finished = true;
 				}
 				else // password incorrect; rider registration restarting
 				{
@@ -123,13 +130,13 @@ int main(void)
 			}
 			else // rider registration
 			{
-				riderRegistration(headPtr, organizationIndex, customerName);
+				rider_registration(head_ptr, organization_index, customer_name);
 				puts("Rider Registered!\n");
 			}
 		}
 
 		// once rider registration is over, print summary and exit
-		printSummary(headPtr);
+		print_summary(head_ptr);
 		return EXIT_SUCCESS;
 	}
 	else
@@ -141,43 +148,46 @@ int main(void)
 
 } // main
 
-// TASKS & VALIDATION
+// task & validation functions
 
 /*
- * fgetsRemoveNewLine
- * parameters: string to be written to
- * purpose: scans in string and removes new line
- * return: void; returns nothing
+ * Function: fgets_remove_newline
+ * ----------------------------
+ *  Scans in a string and removes the newline character if present.
+ *
+ *  input_string: the string to read input into
  */
-
-void fgetsRemoveNewLine(char *inputString)
+void fgets_remove_newline(char *input_string)
 {
 	// read in string and get string length
-	fgets(inputString, BUFFER_SIZE, stdin);
-	size_t stringLength = strlen(inputString);
+	fgets(input_string, BUFFER_SIZE, stdin);
+	size_t string_length = strlen(input_string);
 
 	// replace newline character if there is one
-	if (inputString[stringLength - 1] == '\n')
+	if (input_string[string_length - 1] == '\n')
 	{
-		inputString[stringLength - 1] = '\0';
+		input_string[string_length - 1] = '\0';
 	}
 
-} // fgetsRemoveNewLine
+} // fgets_remove_newline
 
 /*
- * getValidChar
- * parameters: a string array (for comparing) and size of that array (for looping)
- * purpose: validates a character by comparing it to the options
- * return: returns a character, which will have been validated
+ * Function: get_valid_char
+ * ----------------------------
+ *  Validates a character by comparing it to an array of valid options.
+ *
+ *  char_array: array of valid character options
+ *  char_size: size of the character array
+ *
+ *  returns: the valid character
  */
-
-char getValidChar(char *charArray[], size_t charSize)
+char get_valid_char(char *char_array[], size_t char_size)
 {
 	// declare variables
-	char charTest;
-	size_t charLength;
-	char charString[BUFFER_SIZE];
-	bool isValid = false;
+	char char_test;
+	size_t char_length;
+	char char_string[BUFFER_SIZE];
+	bool is_valid = false;
 
 	// validate the character
 	do
@@ -185,55 +195,60 @@ char getValidChar(char *charArray[], size_t charSize)
 		do
 		{
 			// scan in and check string length to ensure one character
-			fgetsRemoveNewLine(charString);
-			charLength = strlen(charString);
-			charString[0] = tolower(charString[0]);
-			charTest = charString[0];
+			fgets_remove_newline(char_string);
+			char_length = strlen(char_string);
+			char_string[0] = tolower(char_string[0]);
+			char_test = char_string[0];
 
 			// display error if longer
-			if (charLength != 1)
+			if (char_length != 1)
 			{
 				puts("Error: Input should be one character!");
 			}
 
-		} while (charLength != 1);
+		} while (char_length != 1);
 
 		// compare to array of pointers
-		for (int i = 0; i < charSize; i++)
+		for (int i = 0; i < char_size; i++)
 		{
-			if (charTest == charArray[i][1])
+			if (char_test == char_array[i][1])
 			{
-				isValid = true;
+				is_valid = true;
 			}
 		}
 
 		// display error if no matches
-		if (!isValid)
+		if (!is_valid)
 		{
 			puts("Error: Not a valid choice!");
 		}
 
-	} while (!isValid);
+	} while (!is_valid);
 
-	return charTest;
+	return char_test;
 
-} // getValidChar
+} // get_valid_char
 
 /*
- * getValidDouble
- * parameters: input string (written to by fgets), double pointer (value we update), and min & max (range checking)
- * purpose: grabs a double from the input string and checks if it is a valid double
- * return: returns a boolean, basically stating if the double is valid or not
+ * Function: get_valid_double
+ * ----------------------------
+ *  Validates a double by checking if it is within a specified range.
+ *
+ *  input_string: the string to read input from
+ *  valid_double: pointer to store the valid double
+ *  min: minimum valid value
+ *  max: maximum valid value
+ *
+ *  returns: a boolean indicating if the double is valid
  */
-
-bool getValidDouble(const char *inputString, double *validDouble, unsigned int min, unsigned int max)
+bool get_valid_double(const char *input_string, double *valid_double, unsigned int min, unsigned int max)
 {
 	// declare variables
 	char *end;
-	bool isValid = false;
-	double doubleTest = strtod(inputString, &end);
+	bool is_valid = false;
+	double double_test = strtod(input_string, &end);
 
-	if (end == inputString) // catches inputs that aren't numbers
+	if (end == input_string) // catches inputs that aren't numbers
 	{
 		printf("%s\n", "Error: not a decimal number!");
 	}
@@ -241,46 +256,46 @@ bool getValidDouble(const char *inputString, double *validDouble, unsigned int m
 	{
 		printf("%s\n", "Error: extra characters at the end of input!");
 	}
-	else if (doubleTest < min || doubleTest > max) // range check
+	else if (double_test < min || double_test > max) // range check
 	{
 		printf("Error: Enter a value between %d and %d!\n", min, max);
 	}
 	else // update pointer and return true since number is valid
 	{
-		*validDouble = (double)doubleTest;
-		isValid = true;
+		*valid_double = (double)double_test;
+		is_valid = true;
 	}
 
 	// return the validity of the test
-	return isValid;
+	return is_valid;
 
-} // getValidDouble
+} // get_valid_double
 
 /*
- * validatePassword
- * parameters: no parameters
- * purpose: validates a password
- * return: returns a boolean based on if the attempts were succesful
+ * Function: validate_password
+ * ----------------------------
+ *  Validates a password.
+ *
+ *  returns: a boolean indicating if the password is valid
  */
-
-bool validatePassword(void)
+bool validate_password(void)
 {
 	// declare variables
-	int compareResult;
+	int compare_result;
 	unsigned int count = 0;
-	char passwordInput[BUFFER_SIZE];
-	bool isValid = false;
+	char password_input[BUFFER_SIZE];
+	bool is_valid = false;
 
 	// loop 3 times or until password is valid
 	do
 	{
-		fgetsRemoveNewLine(passwordInput);
-		compareResult = strcmp(passwordInput, password);
+		fgets_remove_newline(password_input);
+		compare_result = strcmp(password_input, password);
 
-		if (compareResult == 0)
+		if (compare_result == 0)
 		{
 			// breaks loop, password is valid
-			isValid = true;
+			is_valid = true;
 		}
 		else
 		{
@@ -288,163 +303,169 @@ bool validatePassword(void)
 			puts("Error: password is incorrect!");
 			count++;
 		}
-	} while (count < 3 && !isValid);
+	} while (count < 3 && !is_valid);
 
 	// return the passwords validity
-	return isValid;
+	return is_valid;
 
-} // validatePassword
+} // validate_password
 
 /*
- * validatePayment
- * parameters: takes a string (for printing) and two double pointers (for printing)
- * purpose: loops until the credit card entered is valid
- * return: void; returns nothing
+ * Function: validate_payment
+ * ----------------------------
+ *  Validates credit card information.
+ *
+ *  customer_name: name of the customer
+ *  personal_total: total amount to be charged
+ *  charity_price: amount to be donated to charity
  */
-
-void validatePayment(char *const customerName, double personalTotal, double charityPrice)
+void validate_payment(char *const customer_name, double personal_total, double charity_price)
 {
 	// declare variables
-	unsigned int hyphenCount = 0;
-	size_t cardLength;
-	char cardInfo[BUFFER_SIZE];
-	bool isValid = false;
+	unsigned int hyphen_count = 0;
+	size_t card_length;
+	char card_info[BUFFER_SIZE];
+	bool is_valid = false;
 
 	do // loop until correct
 	{
 		// prompt input and designate hyphens
-		printf("Your total cost is $%.2lf, Enter your credit card number: (XXXX-####-#####)\n", personalTotal);
-		fgetsRemoveNewLine(cardInfo);
-		cardLength = strlen(cardInfo);
+		printf("Your total cost is $%.2lf, Enter your credit card number: (XXXX-####-#####)\n", personal_total);
+		fgets_remove_newline(card_info);
+		card_length = strlen(card_info);
 
-		char firstHyphen = cardInfo[4];
-		char secondHyphen = cardInfo[9];
-		hyphenCount = 0;
+		char first_hyphen = card_info[4];
+		char second_hyphen = card_info[9];
+		hyphen_count = 0;
 
 		// iterate through string and find hyphen count
-		for (size_t i = 0; i < cardLength; i++)
+		for (size_t i = 0; i < card_length; i++)
 		{
-			if (cardInfo[i] == '-')
+			if (card_info[i] == '-')
 			{
-				hyphenCount++;
+				hyphen_count++;
 			}
 		}
 
-		if (cardLength != 15) // catches incorrect length
+		if (card_length != 15) // catches incorrect length
 		{
 			puts("Error: card number is incorrect length!");
 		}
-		else if (firstHyphen != '-' || secondHyphen != '-') // catches incorrect hyphen positions
+		else if (first_hyphen != '-' || second_hyphen != '-') // catches incorrect hyphen positions
 		{
 			puts("Error: hyphens are not in correct position!");
 		}
-		else if (hyphenCount > 2)
+		else if (hyphen_count > 2)
 		{
 			puts("Error: too many hyphens!");
 		}
 		else // checks data to see if it is valid
 		{
-			char *tokenPtr = strtok(cardInfo, "-");
-			if (isalpha(*tokenPtr) == 0 || isalpha(*(tokenPtr + 1)) == 0 || isalpha(*(tokenPtr + 2)) == 0 || isalpha(*(tokenPtr + 3)) == 0) // catches incorrect first segment
+			char *token_ptr = strtok(card_info, "-");
+			if (isalpha(*token_ptr) == 0 || isalpha(*(token_ptr + 1)) == 0 || isalpha(*(token_ptr + 2)) == 0 || isalpha(*(token_ptr + 3)) == 0) // catches incorrect first segment
 			{
 				puts("Error: correct card format is XXXX-####-#####! (First segment must be all letters)");
 			}
 			else // first segment is correct
 			{
-				tokenPtr = strtok(NULL, "-");
-				if (isdigit(*(tokenPtr)) == 0 || isdigit(*(tokenPtr + 1)) == 0 || isdigit(*(tokenPtr + 2)) == 0 || isdigit(*(tokenPtr + 3)) == 0) // catches incorrect middle segment
+				token_ptr = strtok(NULL, "-");
+				if (isdigit(*(token_ptr)) == 0 || isdigit(*(token_ptr + 1)) == 0 || isdigit(*(token_ptr + 2)) == 0 || isdigit(*(token_ptr + 3)) == 0) // catches incorrect middle segment
 				{
 					puts("Error: correct card format is XXXX-####-#####! (Middle segment must be all numbers)");
 				}
 				else // middle segment is correct
 				{
-					tokenPtr = strtok(NULL, "-");
-					if (isdigit(*tokenPtr) == 0 || isdigit(*(tokenPtr + 1)) == 0 || isdigit(*(tokenPtr + 2)) == 0 || isdigit(*(tokenPtr + 3)) == 0 || isdigit(*(tokenPtr + 4)) == 0) // catches incorrect last segment
+					token_ptr = strtok(NULL, "-");
+					if (isdigit(*token_ptr) == 0 || isdigit(*(token_ptr + 1)) == 0 || isdigit(*(token_ptr + 2)) == 0 || isdigit(*(token_ptr + 3)) == 0 || isdigit(*(token_ptr + 4)) == 0) // catches incorrect last segment
 					{
 						puts("Error: correct card format is XXXX-####-#####! (Last segment must be all numbers)");
 					}
 					else // last segment is correct
 					{
 						// exit payment validation
-						printf("Thank you %s for your purchase. $%.2lf of the ticket sales will go to charity.\n", customerName, charityPrice);
-						isValid = true;
+						printf("Thank you %s for your purchase. $%.2lf of the ticket sales will go to charity.\n", customer_name, charity_price);
+						is_valid = true;
 					}
 				}
 			}
 		}
-	} while (!isValid);
+	} while (!is_valid);
 
-} // validatePayment
+} // validate_payment
 
 /*
- * promptData
- * parameters: a string (for printing), a double pointer (one we are checking), and min & max (range checking)
- * purpose: loops until the getValidDouble function returns true, providing us a valid double
- * return: void; returns nothing
+ * Function: prompt_data
+ * ----------------------------
+ *  Prompts user for input and validates it.
+ *
+ *  prompt_string: the prompt message to display
+ *  double_ptr: pointer to store the valid double
+ *  min: minimum valid value
+ *  max: maximum valid value
  */
-
-void promptData(char *const promptString, double *const doublePtr, unsigned int min, unsigned int max)
+void prompt_data(char *const prompt_string, double *const double_ptr, unsigned int min, unsigned int max)
 {
 	// declare variables
-	char inputStr[BUFFER_SIZE];
-	bool isValid = false;
+	char input_str[BUFFER_SIZE];
+	bool is_valid = false;
 
 	// loop until good data has been inputted
 	do
 	{
-		printf("%s\n", promptString);
-		fgetsRemoveNewLine(inputStr);
-		isValid = getValidDouble(inputStr, doublePtr, min, max);
+		printf("%s\n", prompt_string);
+		fgets_remove_newline(input_str);
+		is_valid = get_valid_double(input_str, double_ptr, min, max);
 
-	} while (!isValid);
+	} while (!is_valid);
 
-} // promptData
+} // prompt_data
 
-// LINKED LIST FUNCTIONS
+// linked list functions
 
 /*
- * insertNode
- * parameters: a double pointer to the head of linked list & organization to insert
- * purpose: inserts a node alphabetically into the organization linked list
- * return: void; returns nothing (adds organization to the linked list)
+ * Function: insert_node
+ * ----------------------------
+ *  Inserts a node alphabetically into the organization linked list.
+ *
+ *  head_ptr: a double pointer to the head of linked list
+ *  org_to_insert: organization to insert
  */
-
-void insertNode(Node **headPtr, Organization orgToInsert)
+void insert_node(Node **head_ptr, Organization org_to_insert)
 {
 	// allocate memory
-	Node *newOrgPtr = malloc(sizeof(Node));
+	Node *new_org_ptr = malloc(sizeof(Node));
 
 	// declare boolean flags
 	bool found = false;
 	bool placed = false;
 
-	if (newOrgPtr != NULL)
+	if (new_org_ptr != NULL)
 	{
 		// assign data and next
-		newOrgPtr->orgData = orgToInsert;
-		newOrgPtr->nextPtr = NULL;
+		new_org_ptr->org_data = org_to_insert;
+		new_org_ptr->next_ptr = NULL;
 
 		// set previous pointer to null & current to head
-		Node *previousPtr = NULL;
-		Node *currentPtr = *headPtr;
+		Node *previous_ptr = NULL;
+		Node *current_ptr = *head_ptr;
 
 		// find insertion point
-		while (currentPtr != NULL && !found)
+		while (current_ptr != NULL && !found)
 		{
-			int compare = strcmp(newOrgPtr->orgData.organizationName, currentPtr->orgData.organizationName);
+			int compare = strcmp(new_org_ptr->org_data.organization_name, current_ptr->org_data.organization_name);
 
 			if (compare <= 0) // if the incoming organization name is above the current
 			{
-				if (previousPtr == NULL) // if the insertion point is at the beginning
+				if (previous_ptr == NULL) // if the insertion point is at the beginning
 				{
-					newOrgPtr->nextPtr = *headPtr;
-					*headPtr = newOrgPtr;
+					new_org_ptr->next_ptr = *head_ptr;
+					*head_ptr = new_org_ptr;
 				}
 				else // if the insertion point is in the middle
 				{
-					currentPtr = previousPtr->nextPtr;
-					previousPtr->nextPtr = newOrgPtr;
-					newOrgPtr->nextPtr = currentPtr;
+					current_ptr = previous_ptr->next_ptr;
+					previous_ptr->next_ptr = new_org_ptr;
+					new_org_ptr->next_ptr = current_ptr;
 				}
 
 				// insertion point found, end while loop
@@ -454,61 +475,61 @@ void insertNode(Node **headPtr, Organization orgToInsert)
 			else // moves the list
 			{
 				// the previous pointer now points to current
-				previousPtr = currentPtr;
+				previous_ptr = current_ptr;
 
 				// the current pointer now points to the next pet
-				currentPtr = currentPtr->nextPtr;
+				current_ptr = current_ptr->next_ptr;
 			}
 		}
 
-		if (*headPtr == NULL) // if list is empty
+		if (*head_ptr == NULL) // if list is empty
 		{
-			*headPtr = newOrgPtr;
+			*head_ptr = new_org_ptr;
 			placed = true;
 		}
 
 		if (!placed) // if entry is at the end of list
 		{
-			previousPtr = NULL;
-			currentPtr = *headPtr;
+			previous_ptr = NULL;
+			current_ptr = *head_ptr;
 
-			while (currentPtr->nextPtr != NULL)
+			while (current_ptr->next_ptr != NULL)
 			{
-				previousPtr = currentPtr;
-				currentPtr = currentPtr->nextPtr;
+				previous_ptr = current_ptr;
+				current_ptr = current_ptr->next_ptr;
 			}
 
-			currentPtr->nextPtr = newOrgPtr;
+			current_ptr->next_ptr = new_org_ptr;
 			placed = true;
 		}
 	}
 	else // no memory allocated for node
 	{
-		printf("Error: No memory to create node for %s\n!", orgToInsert.organizationName);
+		printf("Error: No memory to create node for %s\n!", org_to_insert.organization_name);
 	}
 
-} // insertNode
+} // insert_node
 
 /*
- * printOrganizations
- * parameters: a pointer to the head of linked list
- * purpose: iterates through the linked list & prints
- * return: void; returns nothing
+ * Function: print_organizations
+ * ----------------------------
+ *  Prints the organizations in the linked list.
+ *
+ *  head_ptr: a pointer to the head of linked list
  */
-
-void printOrganizations(Node *headPtr)
+void print_organizations(Node *head_ptr)
 {
-	if (headPtr != NULL) // list is not empty
+	if (head_ptr != NULL) // list is not empty
 	{
 		// initialize current & print header
-		Node *currentPtr = headPtr;
+		Node *current_ptr = head_ptr;
 		printf("%s", "Organization\t\tDistance\tCost\t\tPercentage\n");
 
-		while (currentPtr != NULL)
+		while (current_ptr != NULL)
 		{
 			// display and go to next node
-			printf("%s\t\t%.2lf\t\t$%.2lf\t\t%.0lf%%\n", currentPtr->orgData.organizationName, currentPtr->orgData.raceDistance, currentPtr->orgData.raceCost, currentPtr->orgData.charityPercent);
-			currentPtr = currentPtr->nextPtr;
+			printf("%s\t\t%.2lf\t\t$%.2lf\t\t%.0lf%%\n", current_ptr->org_data.organization_name, current_ptr->org_data.race_distance, current_ptr->org_data.race_cost, current_ptr->org_data.charity_percent);
+			current_ptr = current_ptr->next_ptr;
 		}
 
 		printf("%s", "\n");
@@ -518,52 +539,54 @@ void printOrganizations(Node *headPtr)
 		puts("Error: List is empty!");
 	}
 
-} // printOrganizations
+} // print_organizations
 
 /*
- * findOrganizationIndex
- * parameters: a pointer to the head of linked list
- * purpose: returns index of organization entered
- * return: an unsigned int; index of chosen organization
+ * Function: find_organization_index
+ * ----------------------------
+ *  Finds the index of an organization in the linked list based on user input.
+ *
+ *  head_ptr: a pointer to the head of linked list
+ *
+ *  returns: the index of the chosen organization
  */
-
-unsigned int findOrganizationIndex(Node *headPtr)
+unsigned int find_organization_index(Node *head_ptr)
 {
 	// declare variables
-	int compareResult = 0;
+	int compare_result = 0;
 	unsigned int index = 0;
-	char inputStr[BUFFER_SIZE];
-	char organizationName[BUFFER_SIZE];
-	Node *currentPtr = headPtr;
-	bool isValid = false;
+	char input_str[BUFFER_SIZE];
+	char organization_name[BUFFER_SIZE];
+	Node *current_ptr = head_ptr;
+	bool is_valid = false;
 
 	// display header
 	puts("You can register for one of the following bike races and a percentage will be raised for that organization.\n");
-	printOrganizations(headPtr);
+	print_organizations(head_ptr);
 
 	do
 	{
 		// reset index & linked list
 		index = 0;
-		currentPtr = headPtr;
+		current_ptr = head_ptr;
 
 		// prompt for organization name
 		puts("Enter the name of the organization you want to register:");
-		fgetsRemoveNewLine(inputStr);
+		fgets_remove_newline(input_str);
 
 		// iterate through linked list to find organization name
-		while (currentPtr != NULL && !isValid)
+		while (current_ptr != NULL && !is_valid)
 		{
 			// reset result
-			compareResult = 0;
+			compare_result = 0;
 
 			// compare input string and organization name
-			strcpy(organizationName, currentPtr->orgData.organizationName);
-			compareResult = _strcmpi(inputStr, organizationName);
+			strcpy(organization_name, current_ptr->org_data.organization_name);
+			compare_result = _strcmpi(input_str, organization_name);
 
-			if (compareResult == 0) // break loop if found
+			if (compare_result == 0) // break loop if found
 			{
-				isValid = true;
+				is_valid = true;
 			}
 			else // increment index
 			{
@@ -571,37 +594,37 @@ unsigned int findOrganizationIndex(Node *headPtr)
 			}
 
 			// move linked list
-			currentPtr = currentPtr->nextPtr;
+			current_ptr = current_ptr->next_ptr;
 		}
 
 		// display error message if it isn't valid
-		if (!isValid)
+		if (!is_valid)
 		{
 			puts("Error: that organization name was not found in the list of organizations, try again!\n");
 		}
 
-	} while (!isValid);
+	} while (!is_valid);
 
-	printf("You have chosen %s.\n\n", organizationName);
+	printf("You have chosen %s.\n\n", organization_name);
 
 	// return index
 	return index;
 
-} // findOrganizationIndex
+} // find_organization_index
 
-// PROGRAM FUNCTIONS
+// program functions
 
 /*
- * adminSetUp
- * parameters: a struct passed by reference (so values can be changed)
- * purpose: initializes variables for use throughout code
- * return: void; returns nothing
+ * Function: admin_set_up
+ * ----------------------------
+ *  Sets up fundraising organizations.
+ *
+ *  head_ptr: a pointer to the head of linked list
  */
-
-void adminSetUp(Node *headPtr)
+void admin_set_up(Node *head_ptr)
 {
 	char response;
-	unsigned int orgNum = 0;
+	unsigned int org_num = 0;
 
 	puts("Set up the fundraising information for the organizations.");
 
@@ -609,174 +632,176 @@ void adminSetUp(Node *headPtr)
 	{
 		// prompt response
 		puts("\nDo you want to add an organization? Please enter (y)es or (n)o: ");
-		response = getValidChar(responses, AMOUNT_RESPONSES);
+		response = get_valid_char(responses, AMOUNT_RESPONSES);
 
 		if (response == 'y')
 		{
 			// declare organization
-			Organization orgToInsert;
+			Organization org_to_insert;
 
 			// set-up organization name
 			puts("Enter fundraising organizations name:");
-			fgetsRemoveNewLine(orgToInsert.organizationName);
+			fgets_remove_newline(org_to_insert.organization_name);
 
 			// set-up ride distance
-			promptData("Enter distance in miles for bike course:", &(orgToInsert.raceDistance), DISTANCE_MIN, DISTANCE_MAX);
-			printf("The bike race distance is %.2lf miles\n", orgToInsert.raceDistance);
+			prompt_data("Enter distance in miles for bike course:", &(org_to_insert.race_distance), DISTANCE_MIN, DISTANCE_MAX);
+			printf("The bike race distance is %.2lf miles\n", org_to_insert.race_distance);
 
 			// set-up ride cost
-			char racePrompt[BUFFER_SIZE] = "Enter the registration cost of the bike ride for ";
-			strcat(racePrompt, orgToInsert.organizationName);
-			promptData(racePrompt, &(orgToInsert.raceCost), RIDE_COST_MIN, RIDE_COST_MAX);
-			printf("The bike race cost is $%.2lf\n", orgToInsert.raceCost);
+			char race_prompt[BUFFER_SIZE] = "Enter the registration cost of the bike ride for ";
+			strcat(race_prompt, org_to_insert.organization_name);
+			prompt_data(race_prompt, &(org_to_insert.race_cost), RIDE_COST_MIN, RIDE_COST_MAX);
+			printf("The bike race cost is $%.2lf\n", org_to_insert.race_cost);
 
 			// set-up jersey cost
-			char jerseyPrompt[BUFFER_SIZE] = "Enter sales price of jersey for ";
-			strcat(jerseyPrompt, orgToInsert.organizationName);
-			promptData(jerseyPrompt, &(orgToInsert.jerseyCost), JERSEY_COST_MIN, JERSEY_COST_MAX);
-			printf("The bike jersey cost is $%.2lf\n", orgToInsert.jerseyCost);
+			char jersey_prompt[BUFFER_SIZE] = "Enter sales price of jersey for ";
+			strcat(jersey_prompt, org_to_insert.organization_name);
+			prompt_data(jersey_prompt, &(org_to_insert.jersey_cost), JERSEY_COST_MIN, JERSEY_COST_MAX);
+			printf("The bike jersey cost is $%.2lf\n", org_to_insert.jersey_cost);
 
 			// set-up charity percentage
-			char charityPrompt[BUFFER_SIZE] = "Enter percentage of the bike race sales that will be donated to ";
-			strcat(charityPrompt, orgToInsert.organizationName);
-			promptData(charityPrompt, &(orgToInsert.charityPercent), CHARITY_PERCENT_MIN, CHARITY_PERCENT_MAX);
-			printf("You entered %.0lf%% of the bike race to go to charity.\n", orgToInsert.charityPercent);
+			char charity_prompt[BUFFER_SIZE] = "Enter percentage of the bike race sales that will be donated to ";
+			strcat(charity_prompt, org_to_insert.organization_name);
+			prompt_data(charity_prompt, &(org_to_insert.charity_percent), CHARITY_PERCENT_MIN, CHARITY_PERCENT_MAX);
+			printf("You entered %.0lf%% of the bike race to go to charity.\n", org_to_insert.charity_percent);
 
 			// initialize totals
-			orgToInsert.totalRiders = 0;
-			orgToInsert.totalRaceSales = 0;
-			orgToInsert.totalJerseys = 0;
-			orgToInsert.totalJerseySales = 0;
+			org_to_insert.total_riders = 0;
+			org_to_insert.total_race_sales = 0;
+			org_to_insert.total_jerseys = 0;
+			org_to_insert.total_jersey_sales = 0;
 
 			// insert organization into linked list
-			insertNode(headPtr, orgToInsert);
+			insert_node(head_ptr, org_to_insert);
 
 			// increment number of organizations
-			orgNum++;
+			org_num++;
 		}
 
-		if (orgNum == 0)
+		if (org_num == 0)
 		{
 			puts("Error: you must enter at least one organization!");
 		}
 
-	} while (response != 'n' || orgNum == 0);
+	} while (response != 'n' || org_num == 0);
 
-} // adminSetUp
+} // admin_set_up
 
 /*
- * riderRegistration
- * parameters: a struct passed by reference (so values can be changed) and string (for printing)
- * purpose: prompts questions for one rider and updates total variables
- * return: void; returns nothing
+ * Function: rider_registration
+ * ----------------------------
+ *  Registers a rider for a selected organization.
+ *
+ *  head_ptr: a pointer to the head of linked list
+ *  organization_index: index of the chosen organization
+ *  customer_name: name of the customer
  */
-
-void riderRegistration(Node *headPtr, unsigned int organizationIndex, char *const customerName)
+void rider_registration(Node *head_ptr, unsigned int organization_index, char *const customer_name)
 {
 	// personal rider variables
 	unsigned int jersey = 0;
-	double personalJersey = 0;
-	double personalTotal = 0;
-	double charityPrice = 0;
+	double personal_jersey = 0;
+	double personal_total = 0;
+	double charity_price = 0;
 
 	// placeholder variables
-	char chosenSize;
-	char chosenResponse;
-	char chosenReciept;
+	char chosen_size;
+	char chosen_response;
+	char chosen_receipt;
 
 	// position current to right index
-	Node *currentPtr = headPtr;
+	Node *current_ptr = head_ptr;
 
-	if (organizationIndex != 0)
+	if (organization_index != 0)
 	{
-		for (unsigned int i = 0; i < organizationIndex; i++)
+		for (unsigned int i = 0; i < organization_index; i++)
 		{
-			currentPtr = currentPtr->nextPtr;
+			current_ptr = current_ptr->next_ptr;
 		}
 	}
 
 	// prompt for jersey and record results
-	printf("Do you want to purchase a jersey for $%.2lf? Answer with (y)es or (n)o:\n", currentPtr->orgData.jerseyCost);
-	chosenResponse = getValidChar(responses, AMOUNT_RESPONSES);
+	printf("Do you want to purchase a jersey for $%.2lf? Answer with (y)es or (n)o:\n", current_ptr->org_data.jersey_cost);
+	chosen_response = get_valid_char(responses, AMOUNT_RESPONSES);
 
-	if (chosenResponse == 'y') // if they want a jersey
+	if (chosen_response == 'y') // if they want a jersey
 	{
 		puts("Enter your size (s)mall, (m)edium, (l)arge, or (x)large:");
-		chosenSize = getValidChar(jerseySizes, AMOUNT_JERSEY_SIZES);
-		personalJersey = currentPtr->orgData.jerseyCost;
+		chosen_size = get_valid_char(jersey_sizes, AMOUNT_JERSEY_SIZES);
+		personal_jersey = current_ptr->org_data.jersey_cost;
 		jersey++;
 	}
 
 	// computate variables and update organization pointers
-	personalTotal = currentPtr->orgData.raceCost + personalJersey;
-	charityPrice = personalTotal * (currentPtr->orgData.charityPercent * 0.01);
-	currentPtr->orgData.totalRiders = currentPtr->orgData.totalRiders + 1;
-	currentPtr->orgData.totalJerseys = currentPtr->orgData.totalJerseys + jersey;
-	currentPtr->orgData.totalRaceSales = currentPtr->orgData.totalRaceSales + currentPtr->orgData.raceCost;
-	currentPtr->orgData.totalJerseySales = currentPtr->orgData.totalJerseySales + personalJersey;
+	personal_total = current_ptr->org_data.race_cost + personal_jersey;
+	charity_price = personal_total * (current_ptr->org_data.charity_percent * 0.01);
+	current_ptr->org_data.total_riders = current_ptr->org_data.total_riders + 1;
+	current_ptr->org_data.total_jerseys = current_ptr->org_data.total_jerseys + jersey;
+	current_ptr->org_data.total_race_sales = current_ptr->org_data.total_race_sales + current_ptr->org_data.race_cost;
+	current_ptr->org_data.total_jersey_sales = current_ptr->org_data.total_jersey_sales + personal_jersey;
 
 	// prompt for payment
-	validatePayment(customerName, personalTotal, charityPrice);
+	validate_payment(customer_name, personal_total, charity_price);
 
-	// prompt for reciept
+	// prompt for receipt
 	puts("Do you want a receipt (y)es or (n)o?");
-	chosenReciept = getValidChar(responses, AMOUNT_RESPONSES);
+	chosen_receipt = get_valid_char(responses, AMOUNT_RESPONSES);
 
-	if (chosenReciept == 'y') // if they want a reciept
+	if (chosen_receipt == 'y') // if they want a receipt
 	{
-		printf("\nRace :\t\t\t$%.2lf\nJersey :\t\t$%.2lf\n\nTotal Cost :\t\t$%.2lf\nDonation to Charity :\t$%.2lf\n\n", currentPtr->orgData.raceCost, personalJersey, personalTotal, charityPrice);
+		printf("\nRace :\t\t\t$%.2lf\nJersey :\t\t$%.2lf\n\nTotal Cost :\t\t$%.2lf\nDonation to Charity :\t$%.2lf\n\n", current_ptr->org_data.race_cost, personal_jersey, personal_total, charity_price);
 	}
 
-} // riderRegistration
+} // rider_registration
 
 /*
- * printSummary
- * parameters: a struct passed by value
- * purpose: prints all values to file & standard out
- * return: void; returns nothing
+ * Function: print_summary
+ * ----------------------------
+ *  Prints a summary of all organizations to standard out and to a file.
+ *
+ *  head_ptr: a pointer to the head of linked list
  */
-
-void printSummary(Node *headPtr)
+void print_summary(Node *head_ptr)
 {
 	// declare variables
-	double charityRace;
-	double charityShirts;
-	double grandTotal;
-	double totalCharity;
-	Node *currentPtr = headPtr;
-	FILE *filePtr;
+	double charity_race;
+	double charity_shirts;
+	double grand_total;
+	double total_charity;
+	Node *current_ptr = head_ptr;
+	FILE *file_ptr;
 
 	// check if file is null
-	if ((filePtr = fopen("orgList.txt", "w")) == NULL)
+	if ((file_ptr = fopen("orgList.txt", "w")) == NULL)
 	{
 		puts("Error: Couldn't open file for writing");
 	}
 	else // file open was a success
 	{
-		while (currentPtr != NULL)
+		while (current_ptr != NULL)
 		{
 			// declare variables & computate totals
-			charityRace = (currentPtr->orgData.raceCost * (currentPtr->orgData.charityPercent * 0.01)) * currentPtr->orgData.totalRiders;
-			charityShirts = (currentPtr->orgData.totalJerseySales * (currentPtr->orgData.charityPercent * 0.01)) * currentPtr->orgData.totalJerseys;
-			grandTotal = currentPtr->orgData.totalRaceSales + currentPtr->orgData.totalJerseySales;
-			totalCharity = charityRace + charityShirts;
+			charity_race = (current_ptr->org_data.race_cost * (current_ptr->org_data.charity_percent * 0.01)) * current_ptr->org_data.total_riders;
+			charity_shirts = (current_ptr->org_data.total_jersey_sales * (current_ptr->org_data.charity_percent * 0.01)) * current_ptr->org_data.total_jerseys;
+			grand_total = current_ptr->org_data.total_race_sales + current_ptr->org_data.total_jersey_sales;
+			total_charity = charity_race + charity_shirts;
 
 			// print summary of race to standard in
-			printf("\nRace\t\tDistance\tPrice\t\tRegistrants\tTotal Sales\tCharity Amount\n%-15s\t%.2lf\t\t$%.2lf\t\t%.0lf\t\t$%.2lf\t\t$%.2lf", currentPtr->orgData.organizationName, currentPtr->orgData.raceDistance, currentPtr->orgData.raceCost, currentPtr->orgData.totalRiders, currentPtr->orgData.totalRaceSales, charityRace);
-			printf("\n\nShirts\t\tSales\t\tCharity Amount\n%.0lf\t\t$%.2lf\t\t$%.2lf\n", currentPtr->orgData.totalJerseys, currentPtr->orgData.totalJerseySales, charityShirts);
-			printf("\nTotal Sales :\t\t\t\t$%.2lf\nTotal funds raised for charity :\t$%.2lf\n\n", grandTotal, totalCharity);
+			printf("\nRace\t\tDistance\tPrice\t\tRegistrants\tTotal Sales\tCharity Amount\n%-15s\t%.2lf\t\t$%.2lf\t\t%.0lf\t\t$%.2lf\t\t$%.2lf", current_ptr->org_data.organization_name, current_ptr->org_data.race_distance, current_ptr->org_data.race_cost, current_ptr->org_data.total_riders, current_ptr->org_data.total_race_sales, charity_race);
+			printf("\n\nShirts\t\tSales\t\tCharity Amount\n%.0lf\t\t$%.2lf\t\t$%.2lf\n", current_ptr->org_data.total_jerseys, current_ptr->org_data.total_jersey_sales, charity_shirts);
+			printf("\nTotal Sales :\t\t\t\t$%.2lf\nTotal funds raised for charity :\t$%.2lf\n\n", grand_total, total_charity);
 
 			// print summary of race to file
-			fprintf(filePtr, "\nRace\t\tDistance\tPrice\t\tRegistrants\tTotal Sales\tCharity Amount\n%-15s\t%.2lf\t\t$%.2lf\t\t%.0lf\t\t$%.2lf\t\t$%.2lf", currentPtr->orgData.organizationName, currentPtr->orgData.raceDistance, currentPtr->orgData.raceCost, currentPtr->orgData.totalRiders, currentPtr->orgData.totalRaceSales, charityRace);
-			fprintf(filePtr, "\n\nShirts\t\tSales\t\tCharity Amount\n%.0lf\t\t$%.2lf\t\t$%.2lf\n", currentPtr->orgData.totalJerseys, currentPtr->orgData.totalJerseySales, charityShirts);
-			fprintf(filePtr, "\nTotal Sales :\t\t\t\t$%.2lf\nTotal funds raised for charity :\t$%.2lf\n\n", grandTotal, totalCharity);
+			fprintf(file_ptr, "\nRace\t\tDistance\tPrice\t\tRegistrants\tTotal Sales\tCharity Amount\n%-15s\t%.2lf\t\t$%.2lf\t\t%.0lf\t\t$%.2lf\t\t$%.2lf", current_ptr->org_data.organization_name, current_ptr->org_data.race_distance, current_ptr->org_data.race_cost, current_ptr->org_data.total_riders, current_ptr->org_data.total_race_sales, charity_race);
+			fprintf(file_ptr, "\n\nShirts\t\tSales\t\tCharity Amount\n%.0lf\t\t$%.2lf\t\t$%.2lf\n", current_ptr->org_data.total_jerseys, current_ptr->org_data.total_jersey_sales, charity_shirts);
+			fprintf(file_ptr, "\nTotal Sales :\t\t\t\t$%.2lf\nTotal funds raised for charity :\t$%.2lf\n\n", grand_total, total_charity);
 
 			// move linked list
-			currentPtr = currentPtr->nextPtr;
+			current_ptr = current_ptr->next_ptr;
 		}
 	}
 
 	// close file
-	fclose(filePtr);
+	fclose(file_ptr);
 
-} // printSummary
+} // print_summary
