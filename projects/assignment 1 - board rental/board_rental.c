@@ -21,7 +21,7 @@
 // function prototypes
 double get_valid_input(void);
 double calculate_charge(double hours);
-void print_summary(unsigned int boardNum, double totalHours, double totalCharge);
+void print_summary(unsigned int board_num, double total_hours, double total_charge);
 
 /*
  * Function: main

@@ -30,6 +30,3 @@ out/
 # OS files
 .DS_Store
 Thumbs.db
-
-# Additional files to ignore
-/commands.txt

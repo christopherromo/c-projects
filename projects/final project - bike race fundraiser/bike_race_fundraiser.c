@@ -9,10 +9,16 @@
 // libraries
 #include <stdio.h>
 #include <stdbool.h>
-#include <string.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <limits.h>
+
+#if defined(_WIN32)
+    #include <string.h>
+    #define strcasecmp _stricmp
+#else
+    #include <strings.h>
+#endif
 
 // constants
 #define BUFFER_SIZE 80															 // buffer size for fgets
@@ -55,22 +61,22 @@ typedef struct node
 // function prototypes
 
 // task & validation functions
-void fgets_remove_newline(char *inputString);
-char get_valid_char(char *charArray[], size_t charSize);
-bool get_valid_double(const char *inputString, double *validDouble, unsigned int min, unsigned int max);
+void fgets_remove_newline(char *input_string);
+char get_valid_char(char *char_array[], size_t char_size);
+bool get_valid_double(const char *input_string, double *valid_double, unsigned int min, unsigned int max);
 bool validate_password(void);
-void validate_payment(char *const customerName, double personalTotal, double charityPrice);
-void prompt_data(char *const promptString, double *const doublePtr, unsigned int min, unsigned int max);
+void validate_payment(char *const customer_name, double personal_total, double charity_price);
+void prompt_data(char *const prompt_string, double *const double_ptr, unsigned int min, unsigned int max);
 
 // linked list functions
-void insert_node(Node **headPtr, Organization orgToInsert);
-void print_organizations(Node *headPtr);
-unsigned int find_organization_index(Node *headPtr);
+void insert_node(Node **head_ptr, Organization org_to_insert);
+void print_organizations(Node *head_ptr);
+unsigned int find_organization_index(Node *head_ptr);
 
 // program functions
-void admin_set_up(Node *headPtr);
-void rider_registration(Node *headPtr, unsigned int organizationIndex, char *const customerName);
-void print_summary(Node *headPtr);
+void admin_set_up(Node *head_ptr);
+void rider_registration(Node *head_ptr, unsigned int organization_index, char *const customer_name);
+void print_summary(Node *head_ptr);
 
 /*
  * Function: main
@@ -112,7 +118,7 @@ int main(void)
 			// prompt for name and if "quit" begin termination
 			puts("Enter your first name and last name to register for the ride; enter \"QUIT\" to end:");
 			fgets_remove_newline(customer_name);
-			compare_result = _strcmpi(customer_name, "quit");
+			compare_result = strcasecmp(customer_name, "quit");
 
 			if (compare_result == 0) // user wants to exit rider registration
 			{
@@ -305,7 +311,7 @@ bool validate_password(void)
 		}
 	} while (count < 3 && !is_valid);
 
-	// return the passwords validity
+	// return the validity of the password
 	return is_valid;
 
 } // validate_password
@@ -582,7 +588,7 @@ unsigned int find_organization_index(Node *head_ptr)
 
 			// compare input string and organization name
 			strcpy(organization_name, current_ptr->org_data.organization_name);
-			compare_result = _strcmpi(input_str, organization_name);
+			compare_result = strcasecmp(input_str, organization_name);
 
 			if (compare_result == 0) // break loop if found
 			{
@@ -732,7 +738,7 @@ void rider_registration(Node *head_ptr, unsigned int organization_index, char *c
 		jersey++;
 	}
 
-	// computate variables and update organization pointers
+	// compute variables and update organization pointers
 	personal_total = current_ptr->org_data.race_cost + personal_jersey;
 	charity_price = personal_total * (current_ptr->org_data.charity_percent * 0.01);
 	current_ptr->org_data.total_riders = current_ptr->org_data.total_riders + 1;
@@ -772,9 +778,9 @@ void print_summary(Node *head_ptr)
 	FILE *file_ptr;
 
 	// check if file is null
-	if ((file_ptr = fopen("orgList.txt", "w")) == NULL)
+	if ((file_ptr = fopen("org_list.txt", "w")) == NULL)
 	{
-		puts("Error: Couldn't open file for writing");
+		puts("Error: Couldn't open file for writing!");
 	}
 	else // file open was a success
 	{
@@ -786,7 +792,7 @@ void print_summary(Node *head_ptr)
 			grand_total = current_ptr->org_data.total_race_sales + current_ptr->org_data.total_jersey_sales;
 			total_charity = charity_race + charity_shirts;
 
-			// print summary of race to standard in
+			// print summary of race to standard out
 			printf("\nRace\t\tDistance\tPrice\t\tRegistrants\tTotal Sales\tCharity Amount\n%-15s\t%.2lf\t\t$%.2lf\t\t%.0lf\t\t$%.2lf\t\t$%.2lf", current_ptr->org_data.organization_name, current_ptr->org_data.race_distance, current_ptr->org_data.race_cost, current_ptr->org_data.total_riders, current_ptr->org_data.total_race_sales, charity_race);
 			printf("\n\nShirts\t\tSales\t\tCharity Amount\n%.0lf\t\t$%.2lf\t\t$%.2lf\n", current_ptr->org_data.total_jerseys, current_ptr->org_data.total_jersey_sales, charity_shirts);
 			printf("\nTotal Sales :\t\t\t\t$%.2lf\nTotal funds raised for charity :\t$%.2lf\n\n", grand_total, total_charity);
