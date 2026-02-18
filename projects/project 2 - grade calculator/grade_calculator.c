@@ -1,8 +1,8 @@
 /*
- * File:        grade_calculator.c
- * Author:      Christopher Romo
- * Created:     2022-10-03
- * Description: This program allows the user to enter grades for and calculate
+ * file:        grade_calculator.c
+ * author:      christopher romo
+ * created:     2022-10-03
+ * description: this program allows the user to enter grades for and calculate
  *              the final grades of multiple students based on weighted categories.
  */
 
@@ -26,9 +26,9 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
 void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category);
 
 /*
- * Function: main
+ * function: main
  * ----------------------------
- *  Entry point of the program.
+ *  entry point of the program.
  *
  *  returns: exit status code
  */
@@ -52,13 +52,12 @@ int main(void)
 	calculate_grades(grade_book, STUDENTS, GRADE_CATEGORIES);
 
 	return 0;
-
 } // main
 
 /*
- * Function: get_valid_input
+ * function: get_valid_input
  * ----------------------------
- *  Prompts user for input and validates it.
+ *  prompts user for input and validates it.
  *
  *  returns: the valid input
  */
@@ -89,19 +88,18 @@ int get_valid_input(void)
 		}
 		else
 		{
-			puts("Not a vaild input.");
+			puts("Not a valid input.");
 		}
 	} while (!is_valid);
 
 	// return once valid
 	return input;
-
 } // get_valid_input
 
 /*
- * Function: enter_grades
+ * function: enter_grades
  * ----------------------------
- *  Prompts user to enter grades for each student and category.
+ *  prompts user to enter grades for each student and category.
  *
  *  grades: 2D array to store grades
  *  student: number of students
@@ -123,13 +121,12 @@ void enter_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t categor
 		}
 		printf("%s", "\n");
 	}
-
 } // enter_grades
 
 /*
- * Function: print_grades
+ * function: print_grades
  * ----------------------------
- *  Prints the grades entered for each student.
+ *  prints the grades entered for each student.
  *
  *  grades: 2D array of grades
  *  student: number of students
@@ -148,13 +145,12 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
 		}
 		printf("%s", "\n");
 	}
-
 } // print_grades
 
 /*
- * Function: calculate_grades
+ * function: calculate_grades
  * ----------------------------
- *  Calculates and prints the final grades for each student.
+ *  calculates and prints the final grades for each student.
  *
  *  grades: 2D array of grades
  *  student: number of students
@@ -225,5 +221,4 @@ void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t cat
 	// display average
 	total_sum = total_sum / STUDENTS;
 	printf("\nClass average is %.1f\n", total_sum);
-
 } // calculate_grades

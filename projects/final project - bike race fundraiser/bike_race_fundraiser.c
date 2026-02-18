@@ -1,8 +1,8 @@
 /*
- * File:        bike_race_fundraiser.c
- * Author:      Christopher Romo
- * Created:     2022-12-02
- * Description: This program simulates a bike race fundraiser, allowing an admin
+ * file:        bike_race_fundraiser.c
+ * author:      christopher romo
+ * created:     2022-12-02
+ * description: this program simulates a bike race fundraiser, allowing an admin
  *  			to set up organizations and riders to register for the race.
  */
 
@@ -14,10 +14,10 @@
 #include <limits.h>
 
 #if defined(_WIN32)
-    #include <string.h>
-    #define strcasecmp _stricmp
+#include <string.h>
+#define strcasecmp _stricmp
 #else
-    #include <strings.h>
+#include <strings.h>
 #endif
 
 // constants
@@ -48,14 +48,12 @@ typedef struct organization
 	double total_race_sales;
 	double total_jerseys;
 	double total_jersey_sales;
-
 } Organization;
 
 typedef struct node
 {
 	Organization org_data;
 	struct node *next_ptr;
-
 } Node;
 
 // function prototypes
@@ -79,9 +77,9 @@ void rider_registration(Node *head_ptr, unsigned int organization_index, char *c
 void print_summary(Node *head_ptr);
 
 /*
- * Function: main
+ * function: main
  * ----------------------------
- *  Entry point of the program.
+ *  entry point of the program.
  *
  *  returns: exit status code
  */
@@ -151,15 +149,14 @@ int main(void)
 		puts("Exiting admin set-up.");
 		return EXIT_FAILURE;
 	}
-
 } // main
 
 // task & validation functions
 
 /*
- * Function: fgets_remove_newline
+ * function: fgets_remove_newline
  * ----------------------------
- *  Scans in a string and removes the newline character if present.
+ *  scans in a string and removes the newline character if present.
  *
  *  input_string: the string to read input into
  */
@@ -174,13 +171,12 @@ void fgets_remove_newline(char *input_string)
 	{
 		input_string[string_length - 1] = '\0';
 	}
-
 } // fgets_remove_newline
 
 /*
- * Function: get_valid_char
+ * function: get_valid_char
  * ----------------------------
- *  Validates a character by comparing it to an array of valid options.
+ *  validates a character by comparing it to an array of valid options.
  *
  *  char_array: array of valid character options
  *  char_size: size of the character array
@@ -211,7 +207,6 @@ char get_valid_char(char *char_array[], size_t char_size)
 			{
 				puts("Error: Input should be one character!");
 			}
-
 		} while (char_length != 1);
 
 		// compare to array of pointers
@@ -228,17 +223,15 @@ char get_valid_char(char *char_array[], size_t char_size)
 		{
 			puts("Error: Not a valid choice!");
 		}
-
 	} while (!is_valid);
 
 	return char_test;
-
 } // get_valid_char
 
 /*
- * Function: get_valid_double
+ * function: get_valid_double
  * ----------------------------
- *  Validates a double by checking if it is within a specified range.
+ *  validates a double by checking if it is within a specified range.
  *
  *  input_string: the string to read input from
  *  valid_double: pointer to store the valid double
@@ -274,13 +267,12 @@ bool get_valid_double(const char *input_string, double *valid_double, unsigned i
 
 	// return the validity of the test
 	return is_valid;
-
 } // get_valid_double
 
 /*
- * Function: validate_password
+ * function: validate_password
  * ----------------------------
- *  Validates a password.
+ *  validates a password.
  *
  *  returns: a boolean indicating if the password is valid
  */
@@ -313,13 +305,12 @@ bool validate_password(void)
 
 	// return the validity of the password
 	return is_valid;
-
 } // validate_password
 
 /*
- * Function: validate_payment
+ * function: validate_payment
  * ----------------------------
- *  Validates credit card information.
+ *  validates credit card information.
  *
  *  customer_name: name of the customer
  *  personal_total: total amount to be charged
@@ -396,13 +387,12 @@ void validate_payment(char *const customer_name, double personal_total, double c
 			}
 		}
 	} while (!is_valid);
-
 } // validate_payment
 
 /*
- * Function: prompt_data
+ * function: prompt_data
  * ----------------------------
- *  Prompts user for input and validates it.
+ *  prompts user for input and validates it.
  *
  *  prompt_string: the prompt message to display
  *  double_ptr: pointer to store the valid double
@@ -421,17 +411,15 @@ void prompt_data(char *const prompt_string, double *const double_ptr, unsigned i
 		printf("%s\n", prompt_string);
 		fgets_remove_newline(input_str);
 		is_valid = get_valid_double(input_str, double_ptr, min, max);
-
 	} while (!is_valid);
-
 } // prompt_data
 
 // linked list functions
 
 /*
- * Function: insert_node
+ * function: insert_node
  * ----------------------------
- *  Inserts a node alphabetically into the organization linked list.
+ *  inserts a node alphabetically into the organization linked list.
  *
  *  head_ptr: a double pointer to the head of linked list
  *  org_to_insert: organization to insert
@@ -513,13 +501,12 @@ void insert_node(Node **head_ptr, Organization org_to_insert)
 	{
 		printf("Error: No memory to create node for %s\n!", org_to_insert.organization_name);
 	}
-
 } // insert_node
 
 /*
- * Function: print_organizations
+ * function: print_organizations
  * ----------------------------
- *  Prints the organizations in the linked list.
+ *  prints the organizations in the linked list.
  *
  *  head_ptr: a pointer to the head of linked list
  */
@@ -544,13 +531,12 @@ void print_organizations(Node *head_ptr)
 	{
 		puts("Error: List is empty!");
 	}
-
 } // print_organizations
 
 /*
- * Function: find_organization_index
+ * function: find_organization_index
  * ----------------------------
- *  Finds the index of an organization in the linked list based on user input.
+ *  finds the index of an organization in the linked list based on user input.
  *
  *  head_ptr: a pointer to the head of linked list
  *
@@ -608,22 +594,20 @@ unsigned int find_organization_index(Node *head_ptr)
 		{
 			puts("Error: that organization name was not found in the list of organizations, try again!\n");
 		}
-
 	} while (!is_valid);
 
 	printf("You have chosen %s.\n\n", organization_name);
 
 	// return index
 	return index;
-
 } // find_organization_index
 
 // program functions
 
 /*
- * Function: admin_set_up
+ * function: admin_set_up
  * ----------------------------
- *  Sets up fundraising organizations.
+ *  sets up fundraising organizations.
  *
  *  head_ptr: a pointer to the head of linked list
  */
@@ -688,15 +672,13 @@ void admin_set_up(Node *head_ptr)
 		{
 			puts("Error: you must enter at least one organization!");
 		}
-
 	} while (response != 'n' || org_num == 0);
-
 } // admin_set_up
 
 /*
- * Function: rider_registration
+ * function: rider_registration
  * ----------------------------
- *  Registers a rider for a selected organization.
+ *  registers a rider for a selected organization.
  *
  *  head_ptr: a pointer to the head of linked list
  *  organization_index: index of the chosen organization
@@ -757,13 +739,12 @@ void rider_registration(Node *head_ptr, unsigned int organization_index, char *c
 	{
 		printf("\nRace :\t\t\t$%.2lf\nJersey :\t\t$%.2lf\n\nTotal Cost :\t\t$%.2lf\nDonation to Charity :\t$%.2lf\n\n", current_ptr->org_data.race_cost, personal_jersey, personal_total, charity_price);
 	}
-
 } // rider_registration
 
 /*
- * Function: print_summary
+ * function: print_summary
  * ----------------------------
- *  Prints a summary of all organizations to standard out and to a file.
+ *  prints a summary of all organizations to standard out and to a file.
  *
  *  head_ptr: a pointer to the head of linked list
  */
@@ -809,5 +790,4 @@ void print_summary(Node *head_ptr)
 
 	// close file
 	fclose(file_ptr);
-
 } // print_summary

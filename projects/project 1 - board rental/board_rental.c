@@ -1,8 +1,8 @@
 /*
- * File:        board_rental.c
- * Author:      Christopher Romo
- * Created:     2022-09-21
- * Description: This program tracks the number of hours boards are rented
+ * file:        board_rental.c
+ * author:      christopher romo
+ * created:     2022-09-21
+ * description: this program tracks the number of hours boards are rented
  *              and calculates the cost based on the hours rented.
  */
 
@@ -24,9 +24,9 @@ double calculate_charge(double hours);
 void print_summary(unsigned int board_num, double total_hours, double total_charge);
 
 /*
- * Function: main
+ * function: main
  * ----------------------------
- *  Entry point of the program.
+ *  entry point of the program.
  *
  *  returns: exit status code
  */
@@ -57,7 +57,6 @@ int main(void)
 			total_hours += hours;
 			printf("%s	%s	%s\n%d	%.2lf	%.2lf\n", "Board", "Hours", "Charge", board_num, hours, charge);
 		}
-
 	} while (hours != -1);
 
 	// display proper exit message
@@ -74,13 +73,12 @@ int main(void)
 	}
 
 	return 0;
-
 } // main
 
 /*
- * Function: get_valid_input
+ * function: get_valid_input
  * ----------------------------
- *  Prompts user for input and validates it.
+ *  prompts user for input and validates it.
  *
  *  returns: the valid input
  */
@@ -99,13 +97,12 @@ double get_valid_input(void)
 	{
 		return input;
 	}
-
 } // get_valid_input
 
 /*
- * Function: calculate_charge
+ * function: calculate_charge
  * ----------------------------
- *  Calculates the charge based on the hours rented.
+ *  calculates the charge based on the hours rented.
  *
  *  hours: the number of hours rented
  *
@@ -141,13 +138,12 @@ double calculate_charge(double hours)
 			return charge;
 		}
 	}
-
 } // calculate_charge
 
 /*
- * Function: print_summary
+ * function: print_summary
  * ----------------------------
- *  Prints the summary of the day's rentals.
+ *  prints the summary of the day's rentals.
  *
  *  board_num: the number of boards rented
  *  total_hours: the total hours rented
@@ -157,5 +153,4 @@ void print_summary(unsigned int board_num, double total_hours, double total_char
 {
 	// print the totals of the day
 	printf("Total for the day\n%s	%s	%s\n%d	%.2lf		%.2lf\n", "Board", "Total Hours", "Total Charge", board_num, total_hours, total_charge);
-
 } // print_summary
