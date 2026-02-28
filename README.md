@@ -10,7 +10,7 @@ This a collection of C projects from my "Programming with C" class. They focus o
 ## Technologies
 
    - C
-   - Visual Studio (used for "Programming with C" projects)
+   - Visual Studio
 
 ## Features
 
