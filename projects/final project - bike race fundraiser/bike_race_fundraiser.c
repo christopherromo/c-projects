@@ -77,18 +77,14 @@ void rider_registration(Node *head_ptr, unsigned int organization_index, char *c
 void print_summary(Node *head_ptr);
 
 /*
- * function: main
- * ----------------------------
- *  entry point of the program.
+ *  allows an admin to set up organizations and riders to register for the race.
  *
  *  returns: exit status code
  */
 int main(void)
 {
-	// declare linked list
 	Node *head_ptr = NULL;
 
-	// declare variables
 	int compare_result;
 	unsigned int organization_index;
 	char customer_name[BUFFER_SIZE];
@@ -154,8 +150,6 @@ int main(void)
 // task & validation functions
 
 /*
- * function: fgets_remove_newline
- * ----------------------------
  *  scans in a string and removes the newline character if present.
  *
  *  input_string: the string to read input into
@@ -174,8 +168,6 @@ void fgets_remove_newline(char *input_string)
 } // fgets_remove_newline
 
 /*
- * function: get_valid_char
- * ----------------------------
  *  validates a character by comparing it to an array of valid options.
  *
  *  char_array: array of valid character options
@@ -185,7 +177,6 @@ void fgets_remove_newline(char *input_string)
  */
 char get_valid_char(char *char_array[], size_t char_size)
 {
-	// declare variables
 	char char_test;
 	size_t char_length;
 	char char_string[BUFFER_SIZE];
@@ -229,8 +220,6 @@ char get_valid_char(char *char_array[], size_t char_size)
 } // get_valid_char
 
 /*
- * function: get_valid_double
- * ----------------------------
  *  validates a double by checking if it is within a specified range.
  *
  *  input_string: the string to read input from
@@ -242,7 +231,6 @@ char get_valid_char(char *char_array[], size_t char_size)
  */
 bool get_valid_double(const char *input_string, double *valid_double, unsigned int min, unsigned int max)
 {
-	// declare variables
 	char *end;
 	bool is_valid = false;
 	double double_test = strtod(input_string, &end);
@@ -270,15 +258,12 @@ bool get_valid_double(const char *input_string, double *valid_double, unsigned i
 } // get_valid_double
 
 /*
- * function: validate_password
- * ----------------------------
  *  validates a password.
  *
  *  returns: a boolean indicating if the password is valid
  */
 bool validate_password(void)
 {
-	// declare variables
 	int compare_result;
 	unsigned int count = 0;
 	char password_input[BUFFER_SIZE];
@@ -308,8 +293,6 @@ bool validate_password(void)
 } // validate_password
 
 /*
- * function: validate_payment
- * ----------------------------
  *  validates credit card information.
  *
  *  customer_name: name of the customer
@@ -318,7 +301,6 @@ bool validate_password(void)
  */
 void validate_payment(char *const customer_name, double personal_total, double charity_price)
 {
-	// declare variables
 	unsigned int hyphen_count = 0;
 	size_t card_length;
 	char card_info[BUFFER_SIZE];
@@ -390,8 +372,6 @@ void validate_payment(char *const customer_name, double personal_total, double c
 } // validate_payment
 
 /*
- * function: prompt_data
- * ----------------------------
  *  prompts user for input and validates it.
  *
  *  prompt_string: the prompt message to display
@@ -401,7 +381,6 @@ void validate_payment(char *const customer_name, double personal_total, double c
  */
 void prompt_data(char *const prompt_string, double *const double_ptr, unsigned int min, unsigned int max)
 {
-	// declare variables
 	char input_str[BUFFER_SIZE];
 	bool is_valid = false;
 
@@ -417,8 +396,6 @@ void prompt_data(char *const prompt_string, double *const double_ptr, unsigned i
 // linked list functions
 
 /*
- * function: insert_node
- * ----------------------------
  *  inserts a node alphabetically into the organization linked list.
  *
  *  head_ptr: a double pointer to the head of linked list
@@ -429,7 +406,6 @@ void insert_node(Node **head_ptr, Organization org_to_insert)
 	// allocate memory
 	Node *new_org_ptr = malloc(sizeof(Node));
 
-	// declare boolean flags
 	bool found = false;
 	bool placed = false;
 
@@ -504,8 +480,6 @@ void insert_node(Node **head_ptr, Organization org_to_insert)
 } // insert_node
 
 /*
- * function: print_organizations
- * ----------------------------
  *  prints the organizations in the linked list.
  *
  *  head_ptr: a pointer to the head of linked list
@@ -534,8 +508,6 @@ void print_organizations(Node *head_ptr)
 } // print_organizations
 
 /*
- * function: find_organization_index
- * ----------------------------
  *  finds the index of an organization in the linked list based on user input.
  *
  *  head_ptr: a pointer to the head of linked list
@@ -544,7 +516,6 @@ void print_organizations(Node *head_ptr)
  */
 unsigned int find_organization_index(Node *head_ptr)
 {
-	// declare variables
 	int compare_result = 0;
 	unsigned int index = 0;
 	char input_str[BUFFER_SIZE];
@@ -605,8 +576,6 @@ unsigned int find_organization_index(Node *head_ptr)
 // program functions
 
 /*
- * function: admin_set_up
- * ----------------------------
  *  sets up fundraising organizations.
  *
  *  head_ptr: a pointer to the head of linked list
@@ -626,7 +595,6 @@ void admin_set_up(Node *head_ptr)
 
 		if (response == 'y')
 		{
-			// declare organization
 			Organization org_to_insert;
 
 			// set-up organization name
@@ -676,8 +644,6 @@ void admin_set_up(Node *head_ptr)
 } // admin_set_up
 
 /*
- * function: rider_registration
- * ----------------------------
  *  registers a rider for a selected organization.
  *
  *  head_ptr: a pointer to the head of linked list
@@ -742,15 +708,12 @@ void rider_registration(Node *head_ptr, unsigned int organization_index, char *c
 } // rider_registration
 
 /*
- * function: print_summary
- * ----------------------------
  *  prints a summary of all organizations to standard out and to a file.
  *
  *  head_ptr: a pointer to the head of linked list
  */
 void print_summary(Node *head_ptr)
 {
-	// declare variables
 	double charity_race;
 	double charity_shirts;
 	double grand_total;
@@ -767,7 +730,7 @@ void print_summary(Node *head_ptr)
 	{
 		while (current_ptr != NULL)
 		{
-			// declare variables & computate totals
+			// compute totals
 			charity_race = (current_ptr->org_data.race_cost * (current_ptr->org_data.charity_percent * 0.01)) * current_ptr->org_data.total_riders;
 			charity_shirts = (current_ptr->org_data.total_jersey_sales * (current_ptr->org_data.charity_percent * 0.01)) * current_ptr->org_data.total_jerseys;
 			grand_total = current_ptr->org_data.total_race_sales + current_ptr->org_data.total_jersey_sales;
@@ -788,6 +751,5 @@ void print_summary(Node *head_ptr)
 		}
 	}
 
-	// close file
 	fclose(file_ptr);
 } // print_summary

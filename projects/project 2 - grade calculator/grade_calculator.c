@@ -26,15 +26,12 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
 void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category);
 
 /*
- * function: main
- * ----------------------------
- *  entry point of the program.
+ *  allows the user to enter grades for and calculate the final grades of multiple students based on weighted categories.
  *
  *  returns: exit status code
  */
 int main(void)
 {
-	// declare 2D array
 	int grade_book[STUDENTS][GRADE_CATEGORIES];
 
 	// print header
@@ -55,15 +52,12 @@ int main(void)
 } // main
 
 /*
- * function: get_valid_input
- * ----------------------------
  *  prompts user for input and validates it.
  *
  *  returns: the valid input
  */
 int get_valid_input(void)
 {
-	// declare variables
 	int input;
 	unsigned int scanned_var;
 	bool is_valid = false;
@@ -97,8 +91,6 @@ int get_valid_input(void)
 } // get_valid_input
 
 /*
- * function: enter_grades
- * ----------------------------
  *  prompts user to enter grades for each student and category.
  *
  *  grades: 2D array to store grades
@@ -107,7 +99,6 @@ int get_valid_input(void)
  */
 void enter_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category)
 {
-	// declare variables
 	double input = 0;
 
 	// scan in grades for each cell of 2D array
@@ -124,8 +115,6 @@ void enter_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t categor
 } // enter_grades
 
 /*
- * function: print_grades
- * ----------------------------
  *  prints the grades entered for each student.
  *
  *  grades: 2D array of grades
@@ -148,8 +137,6 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
 } // print_grades
 
 /*
- * function: calculate_grades
- * ----------------------------
  *  calculates and prints the final grades for each student.
  *
  *  grades: 2D array of grades
@@ -158,7 +145,6 @@ void print_grades(const int grades[][GRADE_CATEGORIES], size_t student, size_t c
  */
 void calculate_grades(int grades[][GRADE_CATEGORIES], size_t student, size_t category)
 {
-	// declare variables
 	double adjusted_grades[STUDENTS][GRADE_CATEGORIES];
 	double final_grades[STUDENTS];
 	double sum = 0;

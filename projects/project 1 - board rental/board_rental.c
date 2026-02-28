@@ -24,15 +24,12 @@ double calculate_charge(double hours);
 void print_summary(unsigned int board_num, double total_hours, double total_charge);
 
 /*
- * function: main
- * ----------------------------
- *  entry point of the program.
+ *  track the number of hours boards are rented and calculate the cost based on the hours rented.
  *
  *  returns: exit status code
  */
 int main(void)
 {
-	// initialize variables
 	unsigned int board_num = 0;
 	double hours = 0;
 	double charge = 0;
@@ -76,15 +73,12 @@ int main(void)
 } // main
 
 /*
- * function: get_valid_input
- * ----------------------------
  *  prompts user for input and validates it.
  *
  *  returns: the valid input
  */
 double get_valid_input(void)
 {
-	// declare variables
 	double input;
 	unsigned int scanned_var;
 
@@ -100,8 +94,6 @@ double get_valid_input(void)
 } // get_valid_input
 
 /*
- * function: calculate_charge
- * ----------------------------
  *  calculates the charge based on the hours rented.
  *
  *  hours: the number of hours rented
@@ -110,7 +102,6 @@ double get_valid_input(void)
  */
 double calculate_charge(double hours)
 {
-	// initialize variables
 	double round_hours = ceil(hours);
 	double charge_hours = 0;
 	double charge_rate = 0;
@@ -141,8 +132,6 @@ double calculate_charge(double hours)
 } // calculate_charge
 
 /*
- * function: print_summary
- * ----------------------------
  *  prints the summary of the day's rentals.
  *
  *  board_num: the number of boards rented
