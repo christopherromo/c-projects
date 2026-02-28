@@ -28,8 +28,9 @@ This a collection of C projects from my "Programming with C" class. They focus o
 
 2. Open a terminal in the desired C project directory.
 
-3. Compile the C program:  
-   Example using Clang as the compiler:
+3. Compile the C program.
+     
+   *Example using Clang as the compiler:*
    ```bash
    clang bike_race_fundraiser.c -o bike_race_fundraiser
    ```
