@@ -22,7 +22,7 @@ This a collection of C projects from my "Programming with C" class. They focus o
 
 **Key Takeaways:** This class introduced me to deeper concepts of computer science. C is a high-level language that is procedural, meaning most concepts from this language can be applied to similar languages. I started by learning how to setup different environments, set up C programs, write C code, compile C programs, and run compiled programs. I then learned deeper concepts like DRY (don't repeat yourself), SRP (single responsibility principle), memory layout (stack and heap), modularity, refactoring techniques, and more. Overall, these projects helped me better understand what's happening under the covers when it comes to programming.
 
-## Running the Files 🎬
+## Running the Projects 🎬
 
 1. Clone the repository.
 
